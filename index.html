@@ -24,13 +24,15 @@ header{z-index:50;display:flex;align-items:center;gap:10px;flex-wrap:wrap;paddin
 .sets{display:flex;gap:7px;flex-wrap:wrap}.set-btn{background:#102b43;color:#dff3ff;border:1px solid var(--line);border-radius:10px;padding:9px 12px;font-weight:800;cursor:pointer}.set-btn.active{background:var(--accent);color:#042033;border-color:var(--accent)}
 .home-btn{background:#fff;color:#102a3a;border:0;border-radius:10px;padding:9px 13px;font-weight:900;cursor:pointer}
 #stage{position:relative;min-height:0;background:#cfd9df}
-#welcome{position:absolute;inset:0;display:grid;place-items:center;padding:22px;background:linear-gradient(145deg,#081825,#0e2b42)}
-.welcome-card{width:min(100%,760px);text-align:center;background:#0d2235;border:1px solid var(--line);border-radius:24px;padding:36px;box-shadow:0 25px 70px #0007}.welcome-card h2{font-size:clamp(27px,5vw,48px);margin:0 0 12px}.welcome-card p{color:var(--muted);font-size:17px;line-height:1.7}
-.grid{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-top:24px}.card{border:1px solid var(--line);background:#102b43;color:#fff;border-radius:15px;padding:17px 8px;cursor:pointer;font-weight:900}.card:hover{border-color:var(--accent);transform:translateY(-2px)}
+#welcome{position:absolute;inset:0;overflow:auto;padding:22px;background:linear-gradient(145deg,#081825,#0e2b42)}
+.welcome-card{width:min(100%,980px);margin:auto;text-align:center;background:#0d2235;border:1px solid var(--line);border-radius:24px;padding:36px;box-shadow:0 25px 70px #0007}.welcome-card h2{font-size:clamp(27px,5vw,48px);margin:0 0 12px}.welcome-card p{color:var(--muted);font-size:17px;line-height:1.7}
+.section-title{text-align:left;margin:28px 0 12px;color:var(--accent);font-size:18px}.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}.card{border:1px solid var(--line);background:#102b43;color:#fff;border-radius:15px;padding:17px 8px;cursor:pointer;font-weight:900}.card:hover{border-color:var(--accent);transform:translateY(-2px)}.card small{color:var(--muted)}
 #viewer{width:100%;height:100%;border:0;display:none;background:#fff}
 .loading{position:absolute;inset:0;display:none;place-items:center;background:#07131fdd;z-index:30;font-weight:800}.spinner{width:42px;height:42px;border:4px solid #ffffff33;border-top-color:var(--accent);border-radius:50%;animation:spin .8s linear infinite;margin:0 auto 12px}@keyframes spin{to{transform:rotate(360deg)}}
 .lock-note{position:fixed;right:12px;bottom:12px;z-index:70;background:#07131fe8;border:1px solid var(--line);border-radius:10px;padding:8px 11px;color:var(--muted);font-size:12px;pointer-events:none}
+@media(max-width:900px){.grid{grid-template-columns:repeat(3,1fr)}}
 @media(max-width:760px){header{align-items:flex-start}.brand{width:100%;margin:0}.sets{width:100%;overflow-x:auto;flex-wrap:nowrap;padding-bottom:2px}.set-btn{white-space:nowrap}.grid{grid-template-columns:1fr 1fr}.welcome-card{padding:24px 16px}.lock-note{display:none}}
+@media(max-width:430px){.grid{grid-template-columns:1fr}}
 @media print{body{display:none!important}}
 </style>
 </head>
@@ -58,9 +60,12 @@ header{z-index:50;display:flex;align-items:center;gap:10px;flex-wrap:wrap;paddin
 <section id="stage">
   <div id="welcome">
     <div class="welcome-card">
-      <h2>2026 Predicted Practice</h2>
-      <p>Select a practice set. Each original HTML runs in its own frame, preserving its questions, marking system, correction book and teacher records.</p>
-      <div class="grid" id="cards"></div>
+      <h2>SPM Science Practice</h2>
+      <p>Select a practice set. Every original HTML runs independently, preserving its questions, marking system, correction book and teacher records.</p>
+      <div class="section-title">2026 Predicted Practice</div>
+      <div class="grid" id="predictedCards"></div>
+      <div class="section-title">Complete TP Examination Sets</div>
+      <div class="grid" id="tpCards"></div>
     </div>
   </div>
   <iframe id="viewer" referrerpolicy="no-referrer" sandbox="allow-scripts allow-forms allow-same-origin allow-downloads"></iframe>
@@ -73,20 +78,25 @@ header{z-index:50;display:flex;align-items:center;gap:10px;flex-wrap:wrap;paddin
 (()=>{
 'use strict';
 const ACCESS='MDA3';
-const encodedFiles=[
-'U1BNXzIwMjZfU2NpZW5jZV9TZXRfMl9FbmdsaXNoX01PRV9TUE1fTGV2ZWwuaHRtbA==',
-'U1BNXzIwMjZfU2NpZW5jZV9TZXRfM19FbmdsaXNoX01PRV9TUE1fTGV2ZWxfVmVyaWZpZWQuaHRtbA==',
-'U1BNXzIwMjZfU2NpZW5jZV9TZXRfNF9FbmdsaXNoX01PRV9TUE1fTGV2ZWwuaHRtbA==',
-'U1BNXzIwMjZfU2NpZW5jZV9TZXRfNV9FbmdsaXNoX01PRV9TUE1fTGV2ZWwuaHRtbA==',
-'U1BNXzIwMjZfU2NpZW5jZV9TZXRfNl9FbmdsaXNoX01PRV9TUE1fTGV2ZWwuaHRtbA=='
+const sets=[
+{label:'Set 2',group:'predicted',file:atob('U1BNXzIwMjZfU2NpZW5jZV9TZXRfMl9FbmdsaXNoX01PRV9TUE1fTGV2ZWwuaHRtbA==')},
+{label:'Set 3',group:'predicted',file:atob('U1BNXzIwMjZfU2NpZW5jZV9TZXRfM19FbmdsaXNoX01PRV9TUE1fTGV2ZWxfVmVyaWZpZWQuaHRtbA==')},
+{label:'Set 4',group:'predicted',file:atob('U1BNXzIwMjZfU2NpZW5jZV9TZXRfNF9FbmdsaXNoX01PRV9TUE1fTGV2ZWwuaHRtbA==')},
+{label:'Set 5',group:'predicted',file:atob('U1BNXzIwMjZfU2NpZW5jZV9TZXRfNV9FbmdsaXNoX01PRV9TUE1fTGV2ZWwuaHRtbA==')},
+{label:'Set 6',group:'predicted',file:atob('U1BNXzIwMjZfU2NpZW5jZV9TZXRfNl9FbmdsaXNoX01PRV9TUE1fTGV2ZWwuaHRtbA==')},
+{label:'TP Set 13',group:'tp',file:'F5_Science_TP_Set_13_Complete_Online_SPM (1).html'},
+{label:'TP Set 14',group:'tp',file:'F5_Science_TP_Set_14_Complete_Online_SPM (1).html'},
+{label:'TP Set 15',group:'tp',file:'F5_Science_TP_Set_15_Complete_Online_SPM.html'},
+{label:'TP Set 16',group:'tp',file:'F5_Science_TP_Set_16_Complete_Online_SPM.html'},
+{label:'TP Set 17',group:'tp',file:'F5_Science_TP_Set_17_Complete_Online_SPM.html'},
+{label:'TP Set 18',group:'tp',file:'F5_Science_TP_Set_18_Complete_Online_SPM.html'}
 ];
-const sets=encodedFiles.map((v,i)=>({label:`Set ${i+2}`,file:atob(v)}));
-const gate=document.getElementById('gate'),app=document.getElementById('app'),pass=document.getElementById('pass'),error=document.getElementById('error'),viewer=document.getElementById('viewer'),welcome=document.getElementById('welcome'),loading=document.getElementById('loading'),buttons=document.getElementById('setButtons'),cards=document.getElementById('cards');
+const gate=document.getElementById('gate'),app=document.getElementById('app'),pass=document.getElementById('pass'),error=document.getElementById('error'),viewer=document.getElementById('viewer'),welcome=document.getElementById('welcome'),loading=document.getElementById('loading'),buttons=document.getElementById('setButtons'),predictedCards=document.getElementById('predictedCards'),tpCards=document.getElementById('tpCards');
 let unlocked=false,current=-1;
-function render(){sets.forEach((s,i)=>{const b=document.createElement('button');b.className='set-btn';b.textContent=s.label;b.addEventListener('click',()=>openSet(i));buttons.appendChild(b);const c=document.createElement('button');c.className='card';c.innerHTML=`${s.label}<br><small>Open practice</small>`;c.addEventListener('click',()=>openSet(i));cards.appendChild(c);});}
+function render(){sets.forEach((s,i)=>{const b=document.createElement('button');b.className='set-btn';b.textContent=s.label;b.addEventListener('click',()=>openSet(i));buttons.appendChild(b);const c=document.createElement('button');c.className='card';c.innerHTML=`${s.label}<br><small>${s.group==='tp'?'Paper 1 + Paper 2':'Open practice'}</small>`;c.addEventListener('click',()=>openSet(i));(s.group==='tp'?tpCards:predictedCards).appendChild(c);});}
 function unlock(){if(btoa(pass.value.trim())!==ACCESS){error.textContent='Incorrect access code.';pass.value='';pass.focus();return;}unlocked=true;sessionStorage.setItem('science2026_access','1');gate.style.display='none';app.style.display='grid';error.textContent='';}
-function openSet(i){if(!unlocked)return;current=i;loading.style.display='grid';welcome.style.display='none';viewer.style.display='block';document.querySelectorAll('.set-btn').forEach((b,n)=>b.classList.toggle('active',n===i));viewer.src=sets[i].file;}
-function home(){current=-1;viewer.removeAttribute('src');viewer.style.display='none';welcome.style.display='grid';loading.style.display='none';document.querySelectorAll('.set-btn').forEach(b=>b.classList.remove('active'));}
+function openSet(i){if(!unlocked)return;current=i;loading.style.display='grid';welcome.style.display='none';viewer.style.display='block';document.querySelectorAll('.set-btn').forEach((b,n)=>b.classList.toggle('active',n===i));viewer.src=encodeURI(sets[i].file);}
+function home(){current=-1;viewer.removeAttribute('src');viewer.style.display='none';welcome.style.display='block';loading.style.display='none';document.querySelectorAll('.set-btn').forEach(b=>b.classList.remove('active'));}
 function lock(){sessionStorage.removeItem('science2026_access');unlocked=false;home();app.style.display='none';gate.style.display='grid';pass.value='';pass.focus();}
 viewer.addEventListener('load',()=>{loading.style.display='none';try{const d=viewer.contentDocument;d.addEventListener('contextmenu',e=>e.preventDefault());d.addEventListener('copy',e=>e.preventDefault());d.addEventListener('cut',e=>e.preventDefault());d.addEventListener('dragstart',e=>e.preventDefault());d.addEventListener('keydown',protectKeys,true);}catch(e){}});
 function protectKeys(e){const k=e.key.toLowerCase();if(e.key==='F12'||(e.ctrlKey&&e.shiftKey&&['i','j','c'].includes(k))||(e.ctrlKey&&['u','s','c','p'].includes(k))){e.preventDefault();e.stopPropagation();}}
