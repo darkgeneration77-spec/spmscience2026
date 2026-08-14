@@ -66,6 +66,8 @@ header{z-index:50;display:flex;align-items:center;gap:10px;flex-wrap:wrap;paddin
       <div class="grid" id="predictedCards"></div>
       <div class="section-title">Complete TP Examination Sets</div>
       <div class="grid" id="tpCards"></div>
+      <div class="section-title">Selected Units Practice</div>
+      <div class="grid" id="selectedCards"></div>
     </div>
   </div>
   <iframe id="viewer" referrerpolicy="no-referrer" sandbox="allow-scripts allow-forms allow-same-origin allow-downloads"></iframe>
@@ -89,11 +91,12 @@ const sets=[
 {label:'TP Set 15',group:'tp',file:'F5_Science_TP_Set_15_Complete_Online_SPM.html'},
 {label:'TP Set 16',group:'tp',file:'F5_Science_TP_Set_16_Complete_Online_SPM.html'},
 {label:'TP Set 17',group:'tp',file:'F5_Science_TP_Set_17_Complete_Online_SPM.html'},
-{label:'TP Set 18',group:'tp',file:'F5_Science_TP_Set_18_Complete_Online_SPM.html'}
+{label:'TP Set 18',group:'tp',file:'F5_Science_TP_Set_18_Complete_Online_SPM.html'},
+{label:'Selected Units',group:'selected',file:'SPM_Science_Selected_Units_With_Answers_Clean.html'}
 ];
-const gate=document.getElementById('gate'),app=document.getElementById('app'),pass=document.getElementById('pass'),error=document.getElementById('error'),viewer=document.getElementById('viewer'),welcome=document.getElementById('welcome'),loading=document.getElementById('loading'),buttons=document.getElementById('setButtons'),predictedCards=document.getElementById('predictedCards'),tpCards=document.getElementById('tpCards');
+const gate=document.getElementById('gate'),app=document.getElementById('app'),pass=document.getElementById('pass'),error=document.getElementById('error'),viewer=document.getElementById('viewer'),welcome=document.getElementById('welcome'),loading=document.getElementById('loading'),buttons=document.getElementById('setButtons'),predictedCards=document.getElementById('predictedCards'),tpCards=document.getElementById('tpCards'),selectedCards=document.getElementById('selectedCards');
 let unlocked=false,current=-1;
-function render(){sets.forEach((s,i)=>{const b=document.createElement('button');b.className='set-btn';b.textContent=s.label;b.addEventListener('click',()=>openSet(i));buttons.appendChild(b);const c=document.createElement('button');c.className='card';c.innerHTML=`${s.label}<br><small>${s.group==='tp'?'Paper 1 + Paper 2':'Open practice'}</small>`;c.addEventListener('click',()=>openSet(i));(s.group==='tp'?tpCards:predictedCards).appendChild(c);});}
+function render(){sets.forEach((s,i)=>{const b=document.createElement('button');b.className='set-btn';b.textContent=s.label;b.addEventListener('click',()=>openSet(i));buttons.appendChild(b);const c=document.createElement('button');c.className='card';c.innerHTML=`${s.label}<br><small>${s.group==='tp'?'Paper 1 + Paper 2':s.group==='selected'?'Focused practice':'Open practice'}</small>`;c.addEventListener('click',()=>openSet(i));(s.group==='tp'?tpCards:s.group==='selected'?selectedCards:predictedCards).appendChild(c);});}
 function unlock(){if(btoa(pass.value.trim())!==ACCESS){error.textContent='Incorrect access code.';pass.value='';pass.focus();return;}unlocked=true;sessionStorage.setItem('science2026_access','1');gate.style.display='none';app.style.display='grid';error.textContent='';}
 function openSet(i){if(!unlocked)return;current=i;loading.style.display='grid';welcome.style.display='none';viewer.style.display='block';document.querySelectorAll('.set-btn').forEach((b,n)=>b.classList.toggle('active',n===i));viewer.src=encodeURI(sets[i].file);}
 function home(){current=-1;viewer.removeAttribute('src');viewer.style.display='none';welcome.style.display='block';loading.style.display='none';document.querySelectorAll('.set-btn').forEach(b=>b.classList.remove('active'));}
