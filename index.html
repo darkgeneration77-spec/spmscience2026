@@ -82,7 +82,7 @@ header{z-index:50;display:flex;align-items:center;gap:10px;flex-wrap:wrap;paddin
 </section>
 </main>
 <div class="lock-note">Protected access</div>
-<script>localStorage.setItem('science2026_api','https://spm-science-2026-api.darkgeneration77.workers.dev');</script>
+<script src="tracking-client.js"></script>
 <script>
 (()=>{
 'use strict';
@@ -108,7 +108,25 @@ function unlock(){if(btoa(pass.value.trim())!==ACCESS){error.textContent='Incorr
 function openSet(i){if(!unlocked)return;current=i;loading.style.display='grid';welcome.style.display='none';viewer.style.display='block';document.querySelectorAll('.set-btn').forEach((b,n)=>b.classList.toggle('active',n===i));viewer.src=encodeURI(sets[i].file);}
 function home(){current=-1;viewer.removeAttribute('src');viewer.style.display='none';welcome.style.display='block';loading.style.display='none';document.querySelectorAll('.set-btn').forEach(b=>b.classList.remove('active'));}
 function lock(){sessionStorage.removeItem('science2026_access');unlocked=false;home();app.style.display='none';gate.style.display='grid';pass.value='';pass.focus();}
-viewer.addEventListener('load',()=>{loading.style.display='none';try{const d=viewer.contentDocument;d.addEventListener('contextmenu',e=>e.preventDefault());d.addEventListener('copy',e=>e.preventDefault());d.addEventListener('cut',e=>e.preventDefault());d.addEventListener('dragstart',e=>e.preventDefault());d.addEventListener('keydown',protectKeys,true);}catch(e){}});
+function splitUnit(unit){const p=String(unit||'').split('•');return {chapter:(p[0]||'').trim(),subtopic:(p[1]||'').trim()};}
+async function syncProfile(d){const n=d.getElementById('name')?.value.trim()||'';const c=d.getElementById('cls')?.value.trim()||'';if(n)await ScienceTracker.profile(n,c);}
+function attachSet2Tracking(){
+  if(current<0||sets[current].label!=='Set 2')return;
+  const w=viewer.contentWindow,d=viewer.contentDocument;
+  let mq=[],st=[];try{mq=w.eval('mcq');st=w.eval('st');}catch(e){console.warn('Set 2 metadata unavailable',e);return;}
+  const id=ScienceTracker.identity();
+  const ni=d.getElementById('name'),ci=d.getElementById('cls');
+  if(ni&&!ni.value&&id.name)ni.value=id.name;if(ci&&!ci.value&&id.class_name)ci.value=id.class_name;
+  [ni,ci].filter(Boolean).forEach(el=>el.addEventListener('blur',()=>syncProfile(d)));
+  d.querySelectorAll('input[type=radio][name^=m]').forEach(r=>r.addEventListener('change',async e=>{
+    await syncProfile(d);const m=/m(\d+)/.exec(e.target.name);if(!m)return;const i=+m[1],q=mq[i];if(!q)return;const v=+e.target.value,u=splitUnit(q.unit);
+    ScienceTracker.progress({set_name:'Set 2',paper:'Paper 1',question_id:'Q'+(i+1),chapter:u.chapter,subtopic:u.subtopic,skill:'MCQ',student_answer:String.fromCharCode(65+v)+'. '+q.o[v],correct_answer:String.fromCharCode(65+q.a)+'. '+q.o[q.a],is_correct:v===q.a,marks_awarded:v===q.a?1:0,marks_total:1});
+  }));
+  st.forEach(s=>s.parts.forEach((p,j)=>{const ta=d.getElementById(`s${s.num}p${j}`);if(!ta)return;ta.addEventListener('blur',async()=>{if(!ta.value.trim())return;await syncProfile(d);const u=splitUnit(s.unit);const t=ta.value.trim().toLowerCase();const hit=p[2].filter(k=>t.includes(String(k).toLowerCase())).length;const mark=Math.min(p[1],Math.round(hit/p[2].length*p[1]));ScienceTracker.progress({set_name:'Set 2',paper:'Paper 2',question_id:`Q${s.num}(${String.fromCharCode(97+j)})`,chapter:u.chapter,subtopic:u.subtopic,skill:'Structured Response',student_answer:ta.value.trim(),correct_answer:p[3],is_correct:mark>=p[1],marks_awarded:mark,marks_total:p[1]});});}));
+  const complete=[...d.querySelectorAll('button')].find(b=>b.textContent.includes('Complete & Mark'));
+  if(complete)complete.addEventListener('click',()=>setTimeout(async()=>{const raw=localStorage.getItem('spmSciSet2EnglishMOE_result');if(!raw)return;await syncProfile(d);try{const r=JSON.parse(raw);ScienceTracker.attempt({set_name:'Set 2',paper:'Paper 1 + Paper 2',score:Number(r.total||0),total_marks:120,completed:true});}catch(e){}},700));
+}
+viewer.addEventListener('load',()=>{loading.style.display='none';try{const d=viewer.contentDocument;d.addEventListener('contextmenu',e=>e.preventDefault());d.addEventListener('copy',e=>e.preventDefault());d.addEventListener('cut',e=>e.preventDefault());d.addEventListener('dragstart',e=>e.preventDefault());d.addEventListener('keydown',protectKeys,true);attachSet2Tracking();}catch(e){console.warn(e)}});
 function protectKeys(e){const k=e.key.toLowerCase();if(e.key==='F12'||(e.ctrlKey&&e.shiftKey&&['i','j','c'].includes(k))||(e.ctrlKey&&['u','s','c','p'].includes(k))){e.preventDefault();e.stopPropagation();}}
 document.addEventListener('copy',e=>e.preventDefault());document.addEventListener('cut',e=>e.preventDefault());document.addEventListener('dragstart',e=>e.preventDefault());document.addEventListener('keydown',protectKeys,true);
 document.getElementById('unlock').addEventListener('click',unlock);pass.addEventListener('keydown',e=>{if(e.key==='Enter')unlock();});document.getElementById('homeBtn').addEventListener('click',home);document.getElementById('lockBtn').addEventListener('click',lock);
