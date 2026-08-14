@@ -7,131 +7,46 @@
 <title>SPM Science 2026 Practice Portal</title>
 <style>
 :root{--bg:#07131f;--panel:#0d2235;--panel2:#102b43;--line:#244a67;--text:#edf7ff;--muted:#9db6c9;--accent:#55d6ff;--ok:#70e3a4;--danger:#ff8795}
-*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-html,body{height:100%;margin:0;font-family:Inter,Arial,sans-serif;background:var(--bg);color:var(--text)}
-body{overflow:hidden;user-select:none;-webkit-user-select:none}
-button,input{font:inherit}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}html,body{height:100%;margin:0;font-family:Inter,Arial,sans-serif;background:var(--bg);color:var(--text)}body{overflow:hidden;user-select:none;-webkit-user-select:none}button,input{font:inherit}
 #gate{position:fixed;inset:0;z-index:1000;display:grid;place-items:center;padding:20px;background:radial-gradient(circle at 50% 25%,#123a57 0,#07131f 52%,#040b12 100%)}
-.gate-card{width:min(100%,440px);background:rgba(13,34,53,.96);border:1px solid var(--line);border-radius:24px;padding:30px;box-shadow:0 30px 80px #0009;text-align:center}
-.logo{width:72px;height:72px;margin:0 auto 18px;border-radius:20px;display:grid;place-items:center;font-weight:900;font-size:25px;color:#04131d;background:linear-gradient(145deg,var(--accent),var(--ok));box-shadow:0 12px 35px #55d6ff44}
-h1{font-size:26px;margin:8px 0}.sub{color:var(--muted);line-height:1.6;margin:0 0 22px}
-.code-row{display:grid;grid-template-columns:1fr auto;gap:10px}.code-row input{min-width:0;padding:14px 15px;border-radius:12px;border:1px solid var(--line);background:#071723;color:#fff;outline:none;letter-spacing:5px;text-align:center;font-weight:800}.code-row input:focus{border-color:var(--accent);box-shadow:0 0 0 3px #55d6ff22}
-.btn{border:0;border-radius:12px;padding:13px 17px;font-weight:850;cursor:pointer}.primary{background:var(--accent);color:#042033}.secondary{background:#18364e;color:#fff;border:1px solid var(--line)}
-#error{min-height:22px;color:var(--danger);font-weight:700;margin-top:12px}
-#app{height:100%;display:none;grid-template-rows:auto 1fr}
-header{z-index:50;display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding:10px 14px;background:#07131ff2;border-bottom:1px solid var(--line);backdrop-filter:blur(12px)}
-.brand{font-weight:900;margin-right:auto;white-space:nowrap}.brand span{color:var(--accent)}
-.sets{display:flex;gap:7px;flex-wrap:wrap}.set-btn{background:#102b43;color:#dff3ff;border:1px solid var(--line);border-radius:10px;padding:9px 12px;font-weight:800;cursor:pointer}.set-btn.active{background:var(--accent);color:#042033;border-color:var(--accent)}
-.home-btn{background:#fff;color:#102a3a;border:0;border-radius:10px;padding:9px 13px;font-weight:900;cursor:pointer}
-#stage{position:relative;min-height:0;background:#cfd9df}
-#welcome{position:absolute;inset:0;overflow:auto;padding:22px;background:linear-gradient(145deg,#081825,#0e2b42)}
-.welcome-card{width:min(100%,980px);margin:auto;text-align:center;background:#0d2235;border:1px solid var(--line);border-radius:24px;padding:36px;box-shadow:0 25px 70px #0007}.welcome-card h2{font-size:clamp(27px,5vw,48px);margin:0 0 12px}.welcome-card p{color:var(--muted);font-size:17px;line-height:1.7}
-.section-title{text-align:left;margin:28px 0 12px;color:var(--accent);font-size:18px}.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}.card{border:1px solid var(--line);background:#102b43;color:#fff;border-radius:15px;padding:17px 8px;cursor:pointer;font-weight:900}.card:hover{border-color:var(--accent);transform:translateY(-2px)}.card small{color:var(--muted)}
-.dashboard-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px}.dashboard-card{border:1px solid var(--line);background:#0a1b2a;color:#fff;border-radius:16px;padding:20px;cursor:pointer;text-align:left}.dashboard-card b{display:block;font-size:18px;margin-bottom:6px}.dashboard-card span{color:var(--muted)}.dashboard-card:hover{border-color:var(--ok)}
-#viewer{width:100%;height:100%;border:0;display:none;background:#fff}
-.loading{position:absolute;inset:0;display:none;place-items:center;background:#07131fdd;z-index:30;font-weight:800}.spinner{width:42px;height:42px;border:4px solid #ffffff33;border-top-color:var(--accent);border-radius:50%;animation:spin .8s linear infinite;margin:0 auto 12px}@keyframes spin{to{transform:rotate(360deg)}}
-.lock-note{position:fixed;right:12px;bottom:12px;z-index:70;background:#07131fe8;border:1px solid var(--line);border-radius:10px;padding:8px 11px;color:var(--muted);font-size:12px;pointer-events:none}
-@media(max-width:900px){.grid{grid-template-columns:repeat(3,1fr)}}
-@media(max-width:760px){header{align-items:flex-start}.brand{width:100%;margin:0}.sets{width:100%;overflow-x:auto;flex-wrap:nowrap;padding-bottom:2px}.set-btn{white-space:nowrap}.grid{grid-template-columns:1fr 1fr}.dashboard-grid{grid-template-columns:1fr}.welcome-card{padding:24px 16px}.lock-note{display:none}}
-@media(max-width:430px){.grid{grid-template-columns:1fr}}
-@media print{body{display:none!important}}
+.gate-card{width:min(100%,440px);background:rgba(13,34,53,.96);border:1px solid var(--line);border-radius:24px;padding:30px;box-shadow:0 30px 80px #0009;text-align:center}.logo{width:72px;height:72px;margin:0 auto 18px;border-radius:20px;display:grid;place-items:center;font-weight:900;font-size:25px;color:#04131d;background:linear-gradient(145deg,var(--accent),var(--ok));box-shadow:0 12px 35px #55d6ff44}h1{font-size:26px;margin:8px 0}.sub{color:var(--muted);line-height:1.6;margin:0 0 22px}.code-row{display:grid;grid-template-columns:1fr auto;gap:10px}.code-row input{min-width:0;padding:14px 15px;border-radius:12px;border:1px solid var(--line);background:#071723;color:#fff;outline:none;letter-spacing:5px;text-align:center;font-weight:800}.code-row input:focus{border-color:var(--accent);box-shadow:0 0 0 3px #55d6ff22}.btn{border:0;border-radius:12px;padding:13px 17px;font-weight:850;cursor:pointer}.primary{background:var(--accent);color:#042033}.secondary{background:#18364e;color:#fff;border:1px solid var(--line)}#error{min-height:22px;color:var(--danger);font-weight:700;margin-top:12px}
+#app{height:100%;display:none;grid-template-rows:auto 1fr}header{z-index:50;display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding:10px 14px;background:#07131ff2;border-bottom:1px solid var(--line);backdrop-filter:blur(12px)}.brand{font-weight:900;margin-right:auto;white-space:nowrap}.brand span{color:var(--accent)}.sets{display:flex;gap:7px;flex-wrap:wrap}.set-btn{background:#102b43;color:#dff3ff;border:1px solid var(--line);border-radius:10px;padding:9px 12px;font-weight:800;cursor:pointer}.set-btn.active{background:var(--accent);color:#042033;border-color:var(--accent)}.home-btn{background:#fff;color:#102a3a;border:0;border-radius:10px;padding:9px 13px;font-weight:900;cursor:pointer}
+#stage{position:relative;min-height:0;background:#cfd9df}#welcome{position:absolute;inset:0;overflow:auto;padding:22px;background:linear-gradient(145deg,#081825,#0e2b42)}.welcome-card{width:min(100%,980px);margin:auto;text-align:center;background:#0d2235;border:1px solid var(--line);border-radius:24px;padding:36px;box-shadow:0 25px 70px #0007}.welcome-card h2{font-size:clamp(27px,5vw,48px);margin:0 0 12px}.welcome-card p{color:var(--muted);font-size:17px;line-height:1.7}.section-title{text-align:left;margin:28px 0 12px;color:var(--accent);font-size:18px}.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}.card{border:1px solid var(--line);background:#102b43;color:#fff;border-radius:15px;padding:17px 8px;cursor:pointer;font-weight:900}.card:hover{border-color:var(--accent);transform:translateY(-2px)}.card small{color:var(--muted)}.dashboard-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px}.dashboard-card{border:1px solid var(--line);background:#0a1b2a;color:#fff;border-radius:16px;padding:20px;cursor:pointer;text-align:left}.dashboard-card b{display:block;font-size:18px;margin-bottom:6px}.dashboard-card span{color:var(--muted)}.dashboard-card:hover{border-color:var(--ok)}
+#viewer{width:100%;height:100%;border:0;display:none;background:#fff}.loading{position:absolute;inset:0;display:none;place-items:center;background:#07131fdd;z-index:30;font-weight:800}.spinner{width:42px;height:42px;border:4px solid #ffffff33;border-top-color:var(--accent);border-radius:50%;animation:spin .8s linear infinite;margin:0 auto 12px}@keyframes spin{to{transform:rotate(360deg)}}.lock-note{position:fixed;right:12px;bottom:12px;z-index:70;background:#07131fe8;border:1px solid var(--line);border-radius:10px;padding:8px 11px;color:var(--muted);font-size:12px;pointer-events:none}
+@media(max-width:900px){.grid{grid-template-columns:repeat(3,1fr)}}@media(max-width:760px){header{align-items:flex-start}.brand{width:100%;margin:0}.sets{width:100%;overflow-x:auto;flex-wrap:nowrap;padding-bottom:2px}.set-btn{white-space:nowrap}.grid{grid-template-columns:1fr 1fr}.dashboard-grid{grid-template-columns:1fr}.welcome-card{padding:24px 16px}.lock-note{display:none}}@media(max-width:430px){.grid{grid-template-columns:1fr}}@media print{body{display:none!important}}
 </style>
 </head>
 <body oncontextmenu="return false">
-<section id="gate" aria-label="Access gate">
-  <div class="gate-card">
-    <div class="logo">SCI</div>
-    <h1>SPM Science 2026</h1>
-    <p class="sub">Protected practice portal</p>
-    <div class="code-row">
-      <input id="pass" type="password" inputmode="numeric" maxlength="3" autocomplete="off" placeholder="•••" aria-label="Access code">
-      <button class="btn primary" id="unlock">Unlock</button>
-    </div>
-    <div id="error"></div>
-  </div>
-</section>
-
-<main id="app">
-<header>
-  <div class="brand">SPM <span>SCIENCE</span> 2026</div>
-  <div class="sets" id="setButtons"></div>
-  <button class="home-btn" id="homeBtn">Back to Home</button>
-  <button class="btn secondary" onclick="location.href='student-dashboard.html'">Student Dashboard</button>
-  <button class="btn secondary" onclick="location.href='teacher-dashboard.html'">Teacher Dashboard</button>
-  <button class="btn secondary" id="lockBtn">Lock</button>
-</header>
-<section id="stage">
-  <div id="welcome">
-    <div class="welcome-card">
-      <h2>SPM Science Practice</h2>
-      <p>Select a practice set. Every original HTML runs independently, preserving its questions, marking system, correction book and teacher records.</p>
-      <div class="dashboard-grid">
-        <button class="dashboard-card" onclick="location.href='student-dashboard.html'"><b>Student Dashboard</b><span>View progress, wrong questions, weakness analysis and remedial action.</span></button>
-        <button class="dashboard-card" onclick="location.href='teacher-dashboard.html'"><b>Teacher Dashboard</b><span>Check every student's progress, errors, mastery and recommended remediation.</span></button>
-      </div>
-      <div class="section-title">2026 Predicted Practice</div>
-      <div class="grid" id="predictedCards"></div>
-      <div class="section-title">Complete TP Examination Sets</div>
-      <div class="grid" id="tpCards"></div>
-      <div class="section-title">Selected Units Practice</div>
-      <div class="grid" id="selectedCards"></div>
-    </div>
-  </div>
-  <iframe id="viewer" referrerpolicy="no-referrer" sandbox="allow-scripts allow-forms allow-same-origin allow-downloads"></iframe>
-  <div class="loading" id="loading"><div><div class="spinner"></div>Loading practice set…</div></div>
-</section>
-</main>
-<div class="lock-note">Protected access</div>
+<section id="gate"><div class="gate-card"><div class="logo">SCI</div><h1>SPM Science 2026</h1><p class="sub">Protected practice portal</p><div class="code-row"><input id="pass" type="password" inputmode="numeric" maxlength="3" autocomplete="off" placeholder="•••"><button class="btn primary" id="unlock">Unlock</button></div><div id="error"></div></div></section>
+<main id="app"><header><div class="brand">SPM <span>SCIENCE</span> 2026</div><div class="sets" id="setButtons"></div><button class="home-btn" id="homeBtn">Back to Home</button><button class="btn secondary" onclick="location.href='student-dashboard.html'">Student Dashboard</button><button class="btn secondary" onclick="location.href='teacher-dashboard.html'">Teacher Dashboard</button><button class="btn secondary" id="lockBtn">Lock</button></header>
+<section id="stage"><div id="welcome"><div class="welcome-card"><h2>SPM Science Practice</h2><p>Select a practice set. Your answers and progress can be synced to the student and teacher dashboards.</p><div class="dashboard-grid"><button class="dashboard-card" onclick="location.href='student-dashboard.html'"><b>Student Dashboard</b><span>View progress, wrong questions, weakness analysis and remedial action.</span></button><button class="dashboard-card" onclick="location.href='teacher-dashboard.html'"><b>Teacher Dashboard</b><span>Check student progress, errors, mastery and remediation.</span></button></div><div class="section-title">2026 Predicted Practice</div><div class="grid" id="predictedCards"></div><div class="section-title">Complete TP Examination Sets</div><div class="grid" id="tpCards"></div><div class="section-title">Selected Units Practice</div><div class="grid" id="selectedCards"></div></div></div><iframe id="viewer" referrerpolicy="no-referrer" sandbox="allow-scripts allow-forms allow-same-origin allow-downloads"></iframe><div class="loading" id="loading"><div><div class="spinner"></div>Loading practice set…</div></div></section></main><div class="lock-note">Protected access</div>
 <script src="tracking-client.js"></script>
+<script src="predicted-tracking-bridge.js"></script>
 <script>
-(()=>{
-'use strict';
+(()=>{'use strict';
 const ACCESS='MDA3';
 const sets=[
-{label:'Set 2',group:'predicted',file:atob('U1BNXzIwMjZfU2NpZW5jZV9TZXRfMl9FbmdsaXNoX01PRV9TUE1fTGV2ZWwuaHRtbA==')},
-{label:'Set 3',group:'predicted',file:atob('U1BNXzIwMjZfU2NpZW5jZV9TZXRfM19FbmdsaXNoX01PRV9TUE1fTGV2ZWxfVmVyaWZpZWQuaHRtbA==')},
-{label:'Set 4',group:'predicted',file:atob('U1BNXzIwMjZfU2NpZW5jZV9TZXRfNF9FbmdsaXNoX01PRV9TUE1fTGV2ZWwuaHRtbA==')},
-{label:'Set 5',group:'predicted',file:atob('U1BNXzIwMjZfU2NpZW5jZV9TZXRfNV9FbmdsaXNoX01PRV9TUE1fTGV2ZWwuaHRtbA==')},
-{label:'Set 6',group:'predicted',file:atob('U1BNXzIwMjZfU2NpZW5jZV9TZXRfNl9FbmdsaXNoX01PRV9TUE1fTGV2ZWwuaHRtbA==')},
+{label:'Set 2',group:'predicted',file:'SPM_2026_Science_Set_2_English_MOE_SPM_Level.html'},
+{label:'Set 3',group:'predicted',file:'SPM_2026_Science_Set_3_English_MOE_SPM_Level_Verified.html'},
+{label:'Set 4',group:'predicted',file:'SPM_2026_Science_Set_4_English_MOE_SPM_Level.html'},
+{label:'Set 5',group:'predicted',file:'SPM_2026_Science_Set_5_English_MOE_SPM_Level.html'},
+{label:'Set 6',group:'predicted',file:'SPM_2026_Science_Set_6_English_MOE_SPM_Level.html'},
 {label:'TP Set 13',group:'tp',file:'F5_Science_TP_Set_13_Complete_Online_SPM (1).html'},
 {label:'TP Set 14',group:'tp',file:'F5_Science_TP_Set_14_Complete_Online_SPM (1).html'},
 {label:'TP Set 15',group:'tp',file:'F5_Science_TP_Set_15_Complete_Online_SPM.html'},
 {label:'TP Set 16',group:'tp',file:'F5_Science_TP_Set_16_Complete_Online_SPM.html'},
 {label:'TP Set 17',group:'tp',file:'F5_Science_TP_Set_17_Complete_Online_SPM.html'},
 {label:'TP Set 18',group:'tp',file:'F5_Science_TP_Set_18_Complete_Online_SPM.html'},
-{label:'Selected Units',group:'selected',file:'SPM_Science_Selected_Units_With_Answers_Clean.html'}
-];
-const gate=document.getElementById('gate'),app=document.getElementById('app'),pass=document.getElementById('pass'),error=document.getElementById('error'),viewer=document.getElementById('viewer'),welcome=document.getElementById('welcome'),loading=document.getElementById('loading'),buttons=document.getElementById('setButtons'),predictedCards=document.getElementById('predictedCards'),tpCards=document.getElementById('tpCards'),selectedCards=document.getElementById('selectedCards');
-let unlocked=false,current=-1;
-function render(){sets.forEach((s,i)=>{const b=document.createElement('button');b.className='set-btn';b.textContent=s.label;b.addEventListener('click',()=>openSet(i));buttons.appendChild(b);const c=document.createElement('button');c.className='card';c.innerHTML=`${s.label}<br><small>${s.group==='tp'?'Paper 1 + Paper 2':s.group==='selected'?'Focused practice':'Open practice'}</small>`;c.addEventListener('click',()=>openSet(i));(s.group==='tp'?tpCards:s.group==='selected'?selectedCards:predictedCards).appendChild(c);});}
-function unlock(){if(btoa(pass.value.trim())!==ACCESS){error.textContent='Incorrect access code.';pass.value='';pass.focus();return;}unlocked=true;sessionStorage.setItem('science2026_access','1');gate.style.display='none';app.style.display='grid';error.textContent='';}
-function openSet(i){if(!unlocked)return;current=i;loading.style.display='grid';welcome.style.display='none';viewer.style.display='block';document.querySelectorAll('.set-btn').forEach((b,n)=>b.classList.toggle('active',n===i));viewer.src=encodeURI(sets[i].file);}
-function home(){current=-1;viewer.removeAttribute('src');viewer.style.display='none';welcome.style.display='block';loading.style.display='none';document.querySelectorAll('.set-btn').forEach(b=>b.classList.remove('active'));}
-function lock(){sessionStorage.removeItem('science2026_access');unlocked=false;home();app.style.display='none';gate.style.display='grid';pass.value='';pass.focus();}
-function splitUnit(unit){const p=String(unit||'').split('•');return {chapter:(p[0]||'').trim(),subtopic:(p[1]||'').trim()};}
-async function syncProfile(d){const n=d.getElementById('name')?.value.trim()||'';const c=d.getElementById('cls')?.value.trim()||'';if(n)await ScienceTracker.profile(n,c);}
-function attachSet2Tracking(){
-  if(current<0||sets[current].label!=='Set 2')return;
-  const w=viewer.contentWindow,d=viewer.contentDocument;
-  let mq=[],st=[];try{mq=w.eval('mcq');st=w.eval('st');}catch(e){console.warn('Set 2 metadata unavailable',e);return;}
-  const id=ScienceTracker.identity();
-  const ni=d.getElementById('name'),ci=d.getElementById('cls');
-  if(ni&&!ni.value&&id.name)ni.value=id.name;if(ci&&!ci.value&&id.class_name)ci.value=id.class_name;
-  [ni,ci].filter(Boolean).forEach(el=>el.addEventListener('blur',()=>syncProfile(d)));
-  d.querySelectorAll('input[type=radio][name^=m]').forEach(r=>r.addEventListener('change',async e=>{
-    await syncProfile(d);const m=/m(\d+)/.exec(e.target.name);if(!m)return;const i=+m[1],q=mq[i];if(!q)return;const v=+e.target.value,u=splitUnit(q.unit);
-    ScienceTracker.progress({set_name:'Set 2',paper:'Paper 1',question_id:'Q'+(i+1),chapter:u.chapter,subtopic:u.subtopic,skill:'MCQ',student_answer:String.fromCharCode(65+v)+'. '+q.o[v],correct_answer:String.fromCharCode(65+q.a)+'. '+q.o[q.a],is_correct:v===q.a,marks_awarded:v===q.a?1:0,marks_total:1});
-  }));
-  st.forEach(s=>s.parts.forEach((p,j)=>{const ta=d.getElementById(`s${s.num}p${j}`);if(!ta)return;ta.addEventListener('blur',async()=>{if(!ta.value.trim())return;await syncProfile(d);const u=splitUnit(s.unit);const t=ta.value.trim().toLowerCase();const hit=p[2].filter(k=>t.includes(String(k).toLowerCase())).length;const mark=Math.min(p[1],Math.round(hit/p[2].length*p[1]));ScienceTracker.progress({set_name:'Set 2',paper:'Paper 2',question_id:`Q${s.num}(${String.fromCharCode(97+j)})`,chapter:u.chapter,subtopic:u.subtopic,skill:'Structured Response',student_answer:ta.value.trim(),correct_answer:p[3],is_correct:mark>=p[1],marks_awarded:mark,marks_total:p[1]});});}));
-  const complete=[...d.querySelectorAll('button')].find(b=>b.textContent.includes('Complete & Mark'));
-  if(complete)complete.addEventListener('click',()=>setTimeout(async()=>{const raw=localStorage.getItem('spmSciSet2EnglishMOE_result');if(!raw)return;await syncProfile(d);try{const r=JSON.parse(raw);ScienceTracker.attempt({set_name:'Set 2',paper:'Paper 1 + Paper 2',score:Number(r.total||0),total_marks:120,completed:true});}catch(e){}},700));
-}
-viewer.addEventListener('load',()=>{loading.style.display='none';try{const d=viewer.contentDocument;d.addEventListener('contextmenu',e=>e.preventDefault());d.addEventListener('copy',e=>e.preventDefault());d.addEventListener('cut',e=>e.preventDefault());d.addEventListener('dragstart',e=>e.preventDefault());d.addEventListener('keydown',protectKeys,true);attachSet2Tracking();}catch(e){console.warn(e)}});
-function protectKeys(e){const k=e.key.toLowerCase();if(e.key==='F12'||(e.ctrlKey&&e.shiftKey&&['i','j','c'].includes(k))||(e.ctrlKey&&['u','s','c','p'].includes(k))){e.preventDefault();e.stopPropagation();}}
-document.addEventListener('copy',e=>e.preventDefault());document.addEventListener('cut',e=>e.preventDefault());document.addEventListener('dragstart',e=>e.preventDefault());document.addEventListener('keydown',protectKeys,true);
-document.getElementById('unlock').addEventListener('click',unlock);pass.addEventListener('keydown',e=>{if(e.key==='Enter')unlock();});document.getElementById('homeBtn').addEventListener('click',home);document.getElementById('lockBtn').addEventListener('click',lock);
-render();if(sessionStorage.getItem('science2026_access')==='1'){unlocked=true;gate.style.display='none';app.style.display='grid';}else pass.focus();
+{label:'Selected Units',group:'selected',file:'SPM_Science_Selected_Units_With_Answers_Clean.html'}];
+const gate=document.getElementById('gate'),app=document.getElementById('app'),pass=document.getElementById('pass'),error=document.getElementById('error'),viewer=document.getElementById('viewer'),welcome=document.getElementById('welcome'),loading=document.getElementById('loading'),buttons=document.getElementById('setButtons'),predictedCards=document.getElementById('predictedCards'),tpCards=document.getElementById('tpCards'),selectedCards=document.getElementById('selectedCards');let unlocked=false,current=-1;
+function render(){sets.forEach((s,i)=>{const b=document.createElement('button');b.className='set-btn';b.textContent=s.label;b.onclick=()=>openSet(i);buttons.appendChild(b);const c=document.createElement('button');c.className='card';c.innerHTML=`${s.label}<br><small>${s.group==='tp'?'Paper 1 + Paper 2':s.group==='selected'?'Focused practice':'Open practice'}</small>`;c.onclick=()=>openSet(i);(s.group==='tp'?tpCards:s.group==='selected'?selectedCards:predictedCards).appendChild(c);});}
+function unlock(){if(btoa(pass.value.trim())!==ACCESS){error.textContent='Incorrect access code.';pass.value='';pass.focus();return}unlocked=true;sessionStorage.setItem('science2026_access','1');gate.style.display='none';app.style.display='grid';error.textContent=''}
+function openSet(i){if(!unlocked)return;current=i;loading.style.display='grid';welcome.style.display='none';viewer.style.display='block';document.querySelectorAll('.set-btn').forEach((b,n)=>b.classList.toggle('active',n===i));viewer.src=encodeURI(sets[i].file)}
+function home(){current=-1;viewer.removeAttribute('src');viewer.style.display='none';welcome.style.display='block';loading.style.display='none';document.querySelectorAll('.set-btn').forEach(b=>b.classList.remove('active'))}
+function lock(){sessionStorage.removeItem('science2026_access');unlocked=false;home();app.style.display='none';gate.style.display='grid';pass.value='';pass.focus()}
+viewer.addEventListener('load',()=>{loading.style.display='none';try{const d=viewer.contentDocument;d.addEventListener('contextmenu',e=>e.preventDefault());d.addEventListener('copy',e=>e.preventDefault());d.addEventListener('cut',e=>e.preventDefault());d.addEventListener('dragstart',e=>e.preventDefault());d.addEventListener('keydown',protectKeys,true);if(current>=0&&window.PredictedTrackingBridge)PredictedTrackingBridge.attach(viewer,sets[current].label)}catch(e){console.warn(e)}});
+function protectKeys(e){const k=e.key.toLowerCase();if(e.key==='F12'||(e.ctrlKey&&e.shiftKey&&['i','j','c'].includes(k))||(e.ctrlKey&&['u','s','c','p'].includes(k))){e.preventDefault();e.stopPropagation()}}
+document.addEventListener('copy',e=>e.preventDefault());document.addEventListener('cut',e=>e.preventDefault());document.addEventListener('dragstart',e=>e.preventDefault());document.addEventListener('keydown',protectKeys,true);document.getElementById('unlock').onclick=unlock;pass.addEventListener('keydown',e=>{if(e.key==='Enter')unlock()});document.getElementById('homeBtn').onclick=home;document.getElementById('lockBtn').onclick=lock;render();if(sessionStorage.getItem('science2026_access')==='1'){unlocked=true;gate.style.display='none';app.style.display='grid'}else pass.focus();
 })();
 </script>
-</body>
-</html>
+</body></html>
