@@ -1,0 +1,11 @@
+name = "spm-science-2026-api"
+main = "worker.js"
+compatibility_date = "2026-08-14"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "spm-science-2026"
+database_id = "PASTE_YOUR_D1_DATABASE_ID_HERE"
+
+# Set the teacher key as a secret, not plain text:
+# npx wrangler secret put TEACHER_KEY
